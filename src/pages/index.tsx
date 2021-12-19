@@ -17,14 +17,28 @@ const Home: NextPage = () => {
             Take back control of your email.
           </h1>
           <h1 className="text-md w-screen text-center">
-            See the emails you want and get rid of the rest automagically
+            See the emails you want. Get rid of the rest automagically
           </h1>
-          <h1 className="text-sm w-screen text-center">Coming Soon</h1>
+          <a href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
+            <input
+              type="button"
+              className="bg-black text-white w-48 h-12 rounded font-bold mt-2"
+              value="Get Early Access"
+            ></input>
+          </a>
         </div>
       </main>
 
       <footer className="absolute bottom-0 w-screen text-center">
-        <a href="https://twitter.com/_heyglassy">Built by Glassy Ventures</a>
+        <h1>
+          Built by{" "}
+          <a
+            href="https://twitter.com/_heyglassy"
+            className="underline text-blue-500"
+          >
+            Glassy Ventures
+          </a>
+        </h1>
       </footer>
     </div>
   );

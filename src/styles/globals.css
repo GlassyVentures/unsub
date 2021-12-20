@@ -2,9 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Font anti-aliasing, this should be a default 😅 */
+@layer base {
+  button::before {
+    background: hsl(0, 0%, 100%);
+    padding: 16px 24px;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01);
+  }
+  button::after {
+    position: absolute;
+    content: '';
+    top: 8px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    transform: scale(0.9) translateZ(0);
+    filter: blur(15px);
+    background: linear-gradient(
+      to left,
+      #ff5770,
+      #e4428d,
+      #c42da8,
+      #9e16c3,
+      #6501de,
+      #9e16c3,
+      #c42da8,
+      #e4428d,
+      #ff5770
+    );
+    background-size: 200% 200%;
+    animation: animateGlow 4.25s linear infinite;
+  }
+}
 
-* {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+@keyframes animateGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Box-sizing best practices */
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* Stops images from going outside containers */
+img {
+  max-width: 100%;
+}
+
+/* Avoid overlapping new iOS 15 Safari bottom bar */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  bottom: env(safe-area-inset-bottom);
+}
+
+/* Avoid Safari clipping bottom bar */
+@supports (-webkit-touch-callout: none) {
+  body {
+    /* The hack for Safari */
+    height: -webkit-fill-available;
+  }
 }

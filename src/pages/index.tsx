@@ -13,16 +13,16 @@ const Home: NextPage = () => {
       <main>
         <div className="flex flex-col justify-center h-screen items-center">
           <h1 className="text-5xl w-screen text-center font-bold">UNSUB</h1>
-          <h1 className="text-xl w-screen text-center">
+          <h1 className="text-xl w-screen text-center mt-5">
             Take back control of your email.
           </h1>
-          <h1 className="text-md w-screen text-center">
+          <h1 className="text-sm w-screen text-center mt-1">
             See the emails you want. Get rid of the rest automagically
           </h1>
           <a href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
             <input
               type="button"
-              className="bg-black text-white w-48 h-12 rounded font-bold mt-2"
+              className="bg-black text-white w-48 h-12 rounded font-bold mt-10"
               value="Get Early Access"
             ></input>
           </a>

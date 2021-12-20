@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-// Font anti-aliasing, this should be a default 😅
+/* Font anti-aliasing, this should be a default 😅 */
+
 * {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }

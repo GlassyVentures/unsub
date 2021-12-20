@@ -1,5 +1,6 @@
-import type { NextPage } from "next";
-import Head from "next/head";
+import type { NextPage } from 'next'
+import Link from 'next/link'
+import Head from 'next/head'
 
 const Home: NextPage = () => {
   return (
@@ -11,37 +12,38 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="flex flex-col justify-center h-screen items-center">
-          <h1 className="text-5xl w-screen text-center font-bold">UNSUB</h1>
-          <h1 className="text-xl w-screen text-center mt-5">
+        <div className="flex flex-col items-center justify-center h-screen px-4">
+          <h1 className="w-screen text-5xl font-bold text-center">UNSUB</h1>
+          <h2 className="w-screen mt-1 text-xl text-center">
             Take back control of your email.
-          </h1>
-          <h1 className="text-sm w-screen text-center mt-1">
+          </h2>
+          <p className="relative w-screen mb-4 text-base text-center">
             See the emails you want. Get rid of the rest automagically
-          </h1>
-          <a href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
-            <input
-              type="button"
-              className="bg-black text-white w-48 h-12 rounded font-bold mt-10"
-              value="Get Early Access"
-            ></input>
-          </a>
+            <span className="absolute -top-1"> ✨</span>
+          </p>
+          <div className="relative rounded ">
+            <Link passHref href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
+              <button className="py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
+                Get Early Access
+              </button>
+            </Link>
+          </div>
         </div>
       </main>
 
       <footer className="absolute bottom-0 w-screen text-center">
-        <h1>
-          Built by{" "}
+        <h3>
+          Built by{' '}
           <a
             href="https://twitter.com/_heyglassy"
-            className="underline text-blue-500"
+            className="text-blue-700 underline"
           >
             Glassy Ventures
           </a>
-        </h1>
+        </h3>
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

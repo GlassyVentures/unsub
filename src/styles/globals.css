@@ -48,9 +48,11 @@
 }
 
 /* Box-sizing best practices */
+
 html {
   box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
@@ -58,11 +60,13 @@ html {
 }
 
 /* Stops images from going outside containers */
+
 img {
   max-width: 100%;
 }
 
 /* Avoid overlapping new iOS 15 Safari bottom bar */
+
 .tabbar {
   position: fixed;
   bottom: 0;
@@ -70,6 +74,7 @@ img {
 }
 
 /* Avoid Safari clipping bottom bar */
+
 @supports (-webkit-touch-callout: none) {
   body {
     /* The hack for Safari */

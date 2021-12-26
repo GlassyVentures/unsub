@@ -25,7 +25,7 @@ const Home: NextPage = () => {
           </p>
           <div className="relative rounded ">
             <Link passHref href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
-              <button className="py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
+              <button className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
                 Get Early Access
               </button>
             </Link>
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
 
       <footer className="absolute bottom-0 w-screen text-center">
         <h3>
-          Built by{' '}
+          Built by{" "}
           <a
             href="https://twitter.com/_heyglassy"
             className="text-blue-700 underline"

@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import PlausibleProvider from "next-plausible";
 import Head from "next/head";
-import { DefaultSeo } from "components/SEO";
+import { DefaultSeo } from "../components/SEO";
 import { SessionProvider } from "next-auth/react";
 
 const MyApp = ({

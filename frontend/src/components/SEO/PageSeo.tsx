@@ -1,13 +1,13 @@
-import { NextSeo } from 'next-seo'
-import siteMetaData from 'configs/siteMetaData'
+import { NextSeo } from "next-seo";
+import siteMetaData from "../../configs/siteMetaData";
 
 interface seoProps {
-  image?: string
-  desc?: string
-  path?: string
-  title?: string
-  date?: string
-  updated?: string
+  image?: string;
+  desc?: string;
+  path?: string;
+  title?: string;
+  date?: string;
+  updated?: string;
 }
 
 const Seo = ({ title, desc, image, path, date, updated }: seoProps) => {
@@ -17,24 +17,24 @@ const Seo = ({ title, desc, image, path, date, updated }: seoProps) => {
     image: configImage,
     url,
     twitter,
-  } = siteMetaData
+  } = siteMetaData;
 
   const seo = {
     description: desc || configDescription,
     image: `${url}${image}` || configImage,
     title: `${title} - ${configTitle}` || configTitle,
-    url: `${url}${path || ''}`,
+    url: `${url}${path || ""}`,
     date: date,
     updated: updated || date,
-  }
-  const formattedDate = seo.date ? new Date(seo.date).toISOString() : ''
+  };
+  const formattedDate = seo.date ? new Date(seo.date).toISOString() : "";
   const formattedUpdatedDate = seo.updated
     ? new Date(seo.updated).toISOString()
-    : ''
+    : "";
   const featuredImage = {
     url: seo.image,
     alt: seo.title,
-  }
+  };
   return (
     <>
       <NextSeo
@@ -42,7 +42,7 @@ const Seo = ({ title, desc, image, path, date, updated }: seoProps) => {
         description={seo.description}
         canonical={seo.url}
         openGraph={{
-          type: 'article',
+          type: "article",
           article: {
             publishedTime: formattedDate,
             modifiedTime: formattedUpdatedDate,
@@ -55,11 +55,11 @@ const Seo = ({ title, desc, image, path, date, updated }: seoProps) => {
         twitter={{
           handle: twitter,
           site: twitter,
-          cardType: 'summary',
+          cardType: "summary",
         }}
       />
     </>
-  )
-}
+  );
+};
 
-export { Seo }
+export { Seo };

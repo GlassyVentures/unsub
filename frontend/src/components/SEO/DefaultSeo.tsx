@@ -1,8 +1,8 @@
-import siteMetaData from 'configs/siteMetaData'
-import { DefaultSeo as NextDefaultSeo } from 'next-seo'
+import siteMetaData from "../../configs/siteMetaData";
+import { DefaultSeo as NextDefaultSeo } from "next-seo";
 
 interface Props {
-  title?: string
+  title?: string;
 }
 
 const DefaultSeo = (props: Props) => {
@@ -13,8 +13,8 @@ const DefaultSeo = (props: Props) => {
         description={siteMetaData.description}
         canonical={siteMetaData.url}
         openGraph={{
-          type: 'website',
-          locale: 'en_US',
+          type: "website",
+          locale: "en_US",
           url: siteMetaData.url,
           title: siteMetaData.title,
           description: siteMetaData.description,
@@ -29,7 +29,7 @@ const DefaultSeo = (props: Props) => {
         }}
       />
     </>
-  )
-}
+  );
+};
 
-export { DefaultSeo }
+export { DefaultSeo };

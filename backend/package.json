@@ -1,0 +1,23 @@
+{
+    "name": "unsubback2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "build": "tsc -p tsconfig.json && node server.js",
+        "start": "nodemon -e ts --exec \"npm run build\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/node": "^17.0.3",
+        "dotenv": "^10.0.0",
+        "fastify": "^3.25.1",
+        "puppeteer": "^13.0.1"
+    },
+    "devDependencies": {
+        "@types/puppeteer": "^5.4.4",
+        "typescript": "^4.5.4"
+    }
+}

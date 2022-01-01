@@ -21,7 +21,6 @@ export default function handler(
     const page = await browser.newPage();
     await page.goto("https://www.google.com");
     await browser.close();
+    res.status(200).json({ name: "John Doe" });
   })();
-
-  res.status(200).json({ name: "John Doe" });
 }

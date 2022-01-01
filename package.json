@@ -1,42 +1,45 @@
 {
-  "name": "unsub",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@prisma/client": "^3.6.0",
-    "@stripe/stripe-js": "^1.22.0",
-    "@trpc/client": "^9.16.0",
-    "@trpc/next": "^9.16.0",
-    "@trpc/react": "^9.16.0",
-    "@trpc/server": "^9.16.0",
-    "next": "12.0.7",
-    "next-plausible": "^3.1.4",
-    "next-seo": "^4.28.1",
-    "prettier": "^2.5.1",
-    "prisma": "^3.6.0",
-    "puppeteer": "^13.0.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "react-query": "^3.34.5",
-    "ts-node": "^10.4.0",
-    "zod": "^3.11.6"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.0",
-    "@types/react": "17.0.37",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "autoprefixer": "^10.4.0",
-    "eslint": "^8.5.0",
-    "eslint-config-next": "12.0.7",
-    "eslint-config-prettier": "^8.3.0",
-    "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.7",
-    "typescript": "^4.5.4"
-  }
+    "name": "unsub",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "npm ci & next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@prisma/client": "^3.6.0",
+        "@stripe/stripe-js": "^1.22.0",
+        "@trpc/client": "^9.16.0",
+        "@trpc/next": "^9.16.0",
+        "@trpc/react": "^9.16.0",
+        "@trpc/server": "^9.16.0",
+        "chrome-aws-lambda": "^10.1.0",
+        "next": "12.0.7",
+        "next-plausible": "^3.1.4",
+        "next-seo": "^4.28.1",
+        "prettier": "^2.5.1",
+        "prisma": "^3.6.0",
+        "puppeteer-core": "^13.0.1",
+        "react": "17.0.2",
+        "react-dom": "17.0.2",
+        "react-query": "^3.34.5",
+        "ts-node": "^10.4.0",
+        "zod": "^3.11.6"
+    },
+    "devDependencies": {
+        "@types/node": "^17.0.0",
+        "@types/puppeteer": "^5.4.4",
+        "@types/react": "17.0.37",
+        "@typescript-eslint/eslint-plugin": "^5.7.0",
+        "@typescript-eslint/parser": "^5.7.0",
+        "autoprefixer": "^10.4.0",
+        "eslint": "^8.5.0",
+        "eslint-config-next": "12.0.7",
+        "eslint-config-prettier": "^8.3.0",
+        "postcss": "^8.4.5",
+        "puppeteer": "^13.0.1",
+        "tailwindcss": "^3.0.7",
+        "typescript": "^4.5.4"
+    }
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import type { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
-import Header from "components/SEO/Header";
+import Header from "components/Header";
 
 const todo = [
   "Finalizing the server that unsubscribes you from emails",

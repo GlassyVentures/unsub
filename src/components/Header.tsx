@@ -6,7 +6,17 @@ const AuthButton: React.FC = () => {
   const { data: session, status } = useSession();
 
   if (status == "authenticated") {
-    return <h1>{session?.user?.name!}</h1>;
+    return (
+      <div className="flex items-center">
+        <h1 className="text-md invisible md:visible">{session?.user?.name!}</h1>
+        <button
+          className="bg-black py-3 font-bold text-white w-32 rounded-md ml-5"
+          onClick={() => signOut()}
+        >
+          Sign Out
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -23,10 +33,8 @@ const Header: React.FC = ({ children }) => {
   return (
     <div>
       <div className="flex justify-between items-center p-3 shadow-xl bg-gray-200">
-        <Link href="/">
-          <a>
-            <h1 className="font-bold text-xl">UNSUB</h1>
-          </a>
+        <Link passHref href="/">
+          <h1 className="font-bold text-xl">UNSUB</h1>
         </Link>
         <AuthButton />
       </div>

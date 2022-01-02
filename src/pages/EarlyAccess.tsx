@@ -55,21 +55,13 @@ const EarlyAccess = () => {
           {" "}
           If you have any feedback or questions, dm me on twitter!
         </h2>
-        <div className="flex justify-around mt-5">
+        <div className="flex justify-evenly mt-10">
           <div className="relative rounded">
             <Link passHref href="https://twitter.com/@_heyglassy">
               <button className="py-3 font-bold text-black bg-blue-300 w-32 rounded-md">
                 @_heyglassy
               </button>
             </Link>
-          </div>
-          <div className=" relative rounded">
-            <button
-              className="bg-black py-3 font-bold text-white w-32 rounded-md"
-              onClick={() => signOut()}
-            >
-              Sign Out
-            </button>
           </div>
         </div>
       </div>

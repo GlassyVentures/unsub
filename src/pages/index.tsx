@@ -48,8 +48,8 @@ const Home: NextPage = () => {
               Take back control of your email.
             </h2>
             <p className="relative w-screen mb-4 text-base text-center">
-              See the emails you want. Get automatically unsubscribe from the
-              rest with unsub.
+              See the emails you want. Automatically unsubscribe from the rest
+              with unsub.
               <span className="absolute -top-1"> ✨</span>
             </p>
             <EarlyAccess />

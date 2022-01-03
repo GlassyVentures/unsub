@@ -2,31 +2,50 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import Header from "components/Header";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React from "react";
+import type { EarlyAccess } from "types/EarlyAccess";
 
-const EarlyAccess = () => {
+const EarlyAccessButton = () => {
   const { data: session, status } = useSession();
+  let ea: EarlyAccess = session as EarlyAccess;
 
   if (status == "authenticated") {
-    return (
-      <div className="relative rounded ">
-        <Link passHref href="/EarlyAccess">
-          <button className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
-            Start Unsubscribing
-          </button>
-        </Link>
-      </div>
-    );
+    if (ea.early_access) {
+      return (
+        <div className="relative rounded ">
+          <Link passHref href="/EarlyAccess">
+            <button className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
+              Start Unsubscribing
+            </button>
+          </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div className="relative rounded ">
+          <Link passHref href={process.env.NEXT_PUBLIC_PAYMENT_LINK!}>
+            <button className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
+              Get Early Access
+            </button>
+          </Link>
+        </div>
+      );
+    }
   }
 
   return (
     <div className="relative rounded">
-      <Link passHref href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
-        <button className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
-          Get Early Access
-        </button>
-      </Link>
+      <button
+        onClick={() =>
+          signIn("google", {
+            callbackUrl: process.env.NEXT_PUBLIC_PAYMENT_LINK!,
+          })
+        }
+        className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none"
+      >
+        Get Early Access
+      </button>
     </div>
   );
 };
@@ -52,7 +71,7 @@ const Home: NextPage = () => {
               with unsub.
               <span className="absolute -top-1"> ✨</span>
             </p>
-            <EarlyAccess />
+            <EarlyAccessButton />
           </div>
         </Header>
       </main>

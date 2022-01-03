@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "components/Header";
 import Link from "next/link";
-import Twitter from "components/twitter";
+import Twitter from "components/Twitter";
 
 const AccessDenied: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const AccessDenied: React.FC = () => {
             Access is limited to our early access customers.
           </h2>
           <div className="static mt-5">
-            <Link passHref href="https://buy.stripe.com/14k7wta8m6yUfni5kk">
+            <Link passHref href={process.env.NEXT_PUBLIC_PAYMENT_LINK!}>
               <button className="w-64 h-18 relative glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
                 Get Early Access
               </button>

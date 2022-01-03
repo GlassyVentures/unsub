@@ -24,21 +24,22 @@ export default NextAuth({
   ],
   secret: process.env.SECRET!,
   callbacks: {
-    async signIn({ user }) {
-      const data = await prisma.user.findUnique({
+    redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return new URL(url, baseUrl).toString();
+      else if (url.startsWith("https://buy.stripe.com")) return url;
+      return baseUrl;
+    },
+    async session({ user, session }) {
+      const result = await prisma.user.findUnique({
         where: {
           email: user.email!,
         },
-        select: {
-          earlyAccess: true,
-        },
       });
 
-      if (data!.earlyAccess) {
-        console.log(data?.earlyAccess);
-        return true;
-      }
-      return "/AccessDenied";
+      if (result?.earlyAccess) session.early_access = true;
+      else session.early_access = false;
+
+      return session;
     },
   },
 });

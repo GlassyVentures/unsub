@@ -23,4 +23,22 @@ export default NextAuth({
     }),
   ],
   secret: process.env.SECRET!,
+  callbacks: {
+    async signIn({ user }) {
+      const data = await prisma.user.findUnique({
+        where: {
+          email: user.email!,
+        },
+        select: {
+          earlyAccess: true,
+        },
+      });
+
+      if (data!.earlyAccess) {
+        console.log(data?.earlyAccess);
+        return true;
+      }
+      return "/AccessDenied";
+    },
+  },
 });

@@ -1,13 +1,12 @@
-import { getSession, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import type { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 import Header from "components/Header";
+import Twitter from "components/twitter";
 
 const todo = [
   "Finalizing the server that unsubscribes you from emails",
-  "Moving the project to a monorepo",
   "Talking to you and getting your feedback!",
 ];
 
@@ -51,19 +50,11 @@ const EarlyAccess = () => {
             </li>
           ))}
         </ul>
-        <h2 className="text-md mt-12">
+        <h2 className="text-md mt-12 mb-3">
           {" "}
           If you have any feedback or questions, dm me on twitter!
         </h2>
-        <div className="flex justify-evenly mt-10">
-          <div className="relative rounded">
-            <Link passHref href="https://twitter.com/@_heyglassy">
-              <button className="py-3 font-bold text-black bg-blue-300 w-32 rounded-md">
-                @_heyglassy
-              </button>
-            </Link>
-          </div>
-        </div>
+        <Twitter />
       </div>
     </Header>
   );

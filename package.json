@@ -15,6 +15,8 @@
         "@trpc/next": "^9.16.0",
         "@trpc/react": "^9.16.0",
         "@trpc/server": "^9.16.0",
+        "@types/gapi": "^0.0.41",
+        "googleapis": "^92.0.0",
         "next": "12.0.7",
         "next-auth": "^4.0.5",
         "next-plausible": "^3.1.4",
@@ -23,8 +25,7 @@
         "prisma": "^3.6.0",
         "react": "17.0.2",
         "react-dom": "17.0.2",
-        "react-query": "^3.34.5",
-        "stripe": "^8.195.0",
+        "react-query": "^3.34.6",
         "ts-node": "^10.4.0",
         "zod": "^3.11.6"
     },

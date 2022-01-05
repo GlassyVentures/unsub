@@ -13,6 +13,13 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
+model Onboard {
+  email String @id
+  onboarded Boolean @default(false)
+
+  @@unique([email])
+}
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String

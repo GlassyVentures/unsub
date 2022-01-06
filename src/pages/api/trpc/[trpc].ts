@@ -22,7 +22,6 @@ const appRouter = trpc.router().mutation("getEmails", {
   }),
   async resolve({ input }) {
     const labels = ["CATEGORY_SOCIAL", "CATEGORY_PROMOTIONS", "SPAM"];
-    let emails: Array<string> = [];
     let links: Array<string> = [];
     let companies: Array<string> = [];
     let valid_emails: Array<string> = [];
@@ -41,20 +40,16 @@ const appRouter = trpc.router().mutation("getEmails", {
       refresh_token: userInfo?.accounts[0].refresh_token,
     });
 
-    let no_header = 0;
-    await (async function (labels: Array<string>, emails: Array<string>) {
+    await (async function (labels: Array<string>) {
+      let query = "-{";
       for (const label of labels) {
         let paginate = true;
         do {
-          let query = "-{";
-          emails.forEach((email) => (query += ` from:${email}, `));
-          query += "}";
-
           let list = await gmail.users.messages.list({
             userId: "me",
             auth: oauth2Client,
             labelIds: [label],
-            q: query,
+            q: query + "}",
           });
 
           if (list.data.resultSizeEstimate === 0) {
@@ -68,8 +63,6 @@ const appRouter = trpc.router().mutation("getEmails", {
             id: list.data.messages![0].id!,
             fields: "payload/headers",
           });
-
-          // console.log(message.data.payload?.headers);
 
           let from = message.data.payload?.headers?.filter(
             (obj) => obj.name == "From"
@@ -95,20 +88,36 @@ const appRouter = trpc.router().mutation("getEmails", {
             links.push(link);
             valid_emails.push(email);
             companies.push(company);
-          } else {
-            no_header++;
           }
 
-          emails.push(email);
-          // valid_emails.push(email);
+          query += `${email}, `;
         } while (paginate);
       }
-    })(labels, emails);
-    console.log(emails);
-    console.log(links);
-    console.log(valid_emails);
-    console.log(companies);
-    console.log(no_header);
+    })(labels);
+
+    const batch = await prisma.subscriptionBatch.create({
+      data: {
+        userEmail: userInfo!.email!,
+        userId: userInfo!.id!,
+      },
+    });
+
+    const data = links.map((link, idx) => {
+      return {
+        userId: userInfo!.id,
+        company: companies[idx],
+        originEmail: valid_emails[idx],
+        userEmail: userInfo!.email!,
+        unsubscribe: link,
+        batchId: batch.id,
+      };
+    });
+
+    const result = await prisma.subscription.createMany({
+      data: data,
+    });
+
+    console.log(result);
 
     return {
       test: "Hello!",

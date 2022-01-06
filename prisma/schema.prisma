@@ -2,19 +2,19 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
 model Onboard {
-  email String @id
+  email     String  @id
   onboarded Boolean @default(false)
 
   @@unique([email])
@@ -41,6 +41,28 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model SubscriptionBatch {
+  id           String         @id @default(cuid())
+  userId       String
+  userEmail    String
+  timestamp    DateTime       @default(now())
+  user         User           @relation(fields: [userId, userEmail], references: [id, email])
+  Subscription Subscription[]
+}
+
+model Subscription {
+  id           String            @id @default(cuid())
+  batchId      String
+  userId       String
+  company      String
+  originEmail  String
+  userEmail    String
+  unsubscribe  String            @db.VarChar(2000)
+  unsubscribed Boolean           @default(false)
+  user         User              @relation(fields: [userId, userEmail], references: [id, email])
+  batch        SubscriptionBatch @relation(fields: [batchId], references: [id])
+}
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -50,14 +72,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  earlyAccess   Boolean @default(false)
-  accounts      Account[]
-  sessions      Session[]
+  id                String              @id @default(cuid())
+  name              String?
+  email             String?             @unique
+  emailVerified     DateTime?
+  image             String?
+  earlyAccess       Boolean             @default(false)
+  accounts          Account[]
+  sessions          Session[]
+  Subscription      Subscription[]
+  SubscriptionBatch SubscriptionBatch[]
 }
 
 model VerificationToken {
@@ -67,4 +91,3 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-

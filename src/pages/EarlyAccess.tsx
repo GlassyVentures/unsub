@@ -3,6 +3,7 @@ import type { GetServerSidePropsContext } from "next";
 import Header from "components/Header";
 import Twitter from "components/Twitter";
 import Subscriber from "components/Subscriber";
+import { trpc } from "utils/trpc";
 
 const todo = [
   "Finalizing the server that unsubscribes you from emails",
@@ -17,6 +18,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 const EarlyAccess = () => {
   const { data: session } = useSession();
+  const mutation = trpc.useMutation(["getEmails"]);
 
   return (
     <Header>

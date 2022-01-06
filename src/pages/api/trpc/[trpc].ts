@@ -1,6 +1,6 @@
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
-import { string, z } from "zod";
+import { z } from "zod";
 import { google } from "googleapis";
 import { PrismaClient } from "@prisma/client";
 
@@ -21,7 +21,12 @@ const appRouter = trpc.router().mutation("getEmails", {
     email: z.string(),
   }),
   async resolve({ input }) {
+    const labels = ["CATEGORY_SOCIAL", "CATEGORY_PROMOTIONS", "SPAM"];
     let emails: Array<string> = [];
+    let links: Array<string> = [];
+    let companies: Array<string> = [];
+    let valid_emails: Array<string> = [];
+
     const userInfo = await prisma.user.findUnique({
       where: {
         email: input.email,
@@ -36,50 +41,78 @@ const appRouter = trpc.router().mutation("getEmails", {
       refresh_token: userInfo?.accounts[0].refresh_token,
     });
 
-    let paginate = true;
+    let no_header = 0;
+    await (async function (labels: Array<string>, emails: Array<string>) {
+      for (const label of labels) {
+        let paginate = true;
+        do {
+          let query = "-{";
+          emails.forEach((email) => (query += ` from:${email}, `));
+          query += "}";
 
-    do {
-      try {
-        let query = "-{";
-        emails.forEach((email) => (query += ` from:${email}, `));
-        query += "}";
-        console.log(query);
+          let list = await gmail.users.messages.list({
+            userId: "me",
+            auth: oauth2Client,
+            labelIds: [label],
+            q: query,
+          });
 
-        let list = await gmail.users.messages.list({
-          userId: "me",
-          auth: oauth2Client,
-          // labelIds: ["CATEGORY_SOCIAL", "CATEGORY_PROMOTIONS"],
-          // // labelIds: ["CATEGORY_SOCIAL"],
-          labelIds: ["CATEGORY_PROMOTIONS"],
-          q: query,
-          // labelIds: ["SPAM"],
-        });
-        // list.data.nextPageToken === null ? (paginate = false) : null;
-        // list.data.resultSizeEstimate === 0 ? (paginate = false) : null;
-        if (list.data.resultSizeEstimate === 0) {
-          paginate = false;
-          break;
-        }
-        let message = await gmail.users.messages.get({
-          userId: "me",
-          auth: oauth2Client,
-          id: list.data.messages![0].id!,
-          fields: "payload/headers",
-        });
-        console.log(message.data.payload?.headers);
-        let from = message.data.payload?.headers?.filter(
-          (obj) => obj.name == "From"
-        )[0].value;
-        let email = from!.substring(from!.indexOf("<") + 1, from!.indexOf(">"));
-        console.log(email);
-        emails.push(email);
-      } catch (err) {
-        console.log(err);
+          if (list.data.resultSizeEstimate === 0) {
+            paginate = false;
+            break;
+          }
+
+          let message = await gmail.users.messages.get({
+            userId: "me",
+            auth: oauth2Client,
+            id: list.data.messages![0].id!,
+            fields: "payload/headers",
+          });
+
+          // console.log(message.data.payload?.headers);
+
+          let from = message.data.payload?.headers?.filter(
+            (obj) => obj.name == "From"
+          )[0].value;
+
+          let unsub = message.data.payload?.headers?.filter(
+            (obj) => obj.name == "List-Unsubscribe"
+          )[0];
+
+          let email = from!.substring(
+            from!.indexOf("<") + 1,
+            from!.indexOf(">")
+          );
+
+          let company = from!.substring(0, from!.indexOf("<") - 1);
+
+          if (unsub?.value) {
+            let link = unsub.value.substring(
+              unsub.value.indexOf("<") + 1,
+              unsub.value.indexOf(">")
+            );
+
+            links.push(link);
+            valid_emails.push(email);
+            companies.push(company);
+          } else {
+            no_header++;
+          }
+
+          emails.push(email);
+          // valid_emails.push(email);
+        } while (paginate);
       }
-    } while (paginate);
-    // return {
-    //   test: "Hello!",
-    // };
+    })(labels, emails);
+    console.log(emails);
+    console.log(links);
+    console.log(valid_emails);
+    console.log(companies);
+    console.log(no_header);
+
+    return {
+      test: "Hello!",
+    };
   },
 });
 

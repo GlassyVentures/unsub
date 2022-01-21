@@ -1,17 +1,15 @@
-import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import Header from "components/Header";
 import { signIn, useSession } from "next-auth/react";
 import React from "react";
-import type { EarlyAccess } from "types/EarlyAccess";
+import type { NextPage } from "next";
 
-const EarlyAccessButton = () => {
+const EarlyAccessButton: React.FC = () => {
   const { data: session, status } = useSession();
-  let ea: EarlyAccess = session as EarlyAccess;
 
   if (status == "authenticated") {
-    if (ea.early_access) {
+    if (session!.early_access) {
       return (
         <div className="relative rounded ">
           <Link passHref href="/EarlyAccess">

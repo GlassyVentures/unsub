@@ -25,7 +25,8 @@
         "prisma": "^3.6.0",
         "react": "17.0.2",
         "react-dom": "17.0.2",
-        "react-query": "^3.34.6",
+        "react-query": "^3.34.5",
+        "stripe": "^8.197.0",
         "ts-node": "^10.4.0",
         "zod": "^3.11.6"
     },

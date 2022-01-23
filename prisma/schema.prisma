@@ -31,6 +31,7 @@ model Account {
   expires_at         Int?
   token_type         String?
   scope              String?
+  email              String?
   id_token           String? @db.VarChar(2000) // To prevent length error.
   session_state      String?
   oauth_token_secret String?

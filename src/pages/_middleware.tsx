@@ -2,22 +2,22 @@ import { NextResponse } from "next/server";
 
 export function middleware() {
   const ContentSecurityPolicy = `
-    frame-src 'self';
-    frame-ancestors 'none';
-    object-src 'self';
-    base-uri 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://plausible.io/js/plausible.js;
-    child-src 'self';
-    style-src 'self' 'unsafe-inline';
-    img-src * blob: data:;
-    media-src 'self' *.cloudinary.com ;
-    connect-src 'self';
-    upgrade-insecure-requests;
-    block-all-mixed-content;
-    font-src 'self';
-    form-action 'self';
-    default-src 'self';
-    `;
+      frame-src 'self';
+      frame-ancestors 'none';
+      object-src 'self';
+      base-uri 'self';
+      script-src 'self' 'unsafe-eval' 'unsafe-inline' https://plausible.io/js/plausible.js;
+      child-src 'self';
+      style-src 'self' 'unsafe-inline';
+      img-src * blob: data:;
+      media-src 'self' *.cloudinary.com ;
+      connect-src 'self' http://localhost:3000/api/auth/googleoauth	;
+      upgrade-insecure-requests;
+      block-all-mixed-content;
+      font-src 'self';
+      form-action 'self' https://accounts.google.com/o/oauth;
+      default-src 'self';
+      `;
 
   const response = NextResponse.next();
 

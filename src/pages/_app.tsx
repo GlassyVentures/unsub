@@ -20,7 +20,7 @@ const Auth: React.FC = ({ children }) => {
     return <>{children}</>;
   }
 
-  return <div></div>;
+  return <div>Loading...</div>;
 };
 
 const MyApp = ({

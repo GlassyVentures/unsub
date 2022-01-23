@@ -3,6 +3,7 @@ import * as trpcNext from "@trpc/server/adapters/next";
 import { z } from "zod";
 import { google } from "googleapis";
 import { PrismaClient } from "@prisma/client";
+import { getGoogleUrl } from "libs/auth/google";
 
 const prisma = new PrismaClient();
 
@@ -16,114 +17,149 @@ const oauth2Client = new google.auth.OAuth2(
   "http://localhost:3000/api/auth/callback/google"
 );
 
-const appRouter = trpc.router().mutation("getEmails", {
-  input: z.object({
-    email: z.string(),
-  }),
-  async resolve({ input }) {
-    const labels = ["CATEGORY_SOCIAL", "CATEGORY_PROMOTIONS", "SPAM"];
-    let links: Array<string> = [];
-    let companies: Array<string> = [];
-    let valid_emails: Array<string> = [];
+const appRouter = trpc
+  .router()
+  .mutation("getEmails", {
+    input: z.object({
+      email: z.string(),
+    }),
+    async resolve({ input }) {
+      try {
+        const labels = ["CATEGORY_SOCIAL", "CATEGORY_PROMOTIONS", "SPAM"];
+        let links: Array<string> = [];
+        let companies: Array<string> = [];
+        let valid_emails: Array<string> = [];
 
-    const userInfo = await prisma.user.findUnique({
-      where: {
-        email: input.email,
-      },
-      include: {
-        accounts: true,
-      },
-    });
+        const userInfo = await prisma.user.findUnique({
+          where: {
+            email: input.email,
+          },
+          include: {
+            accounts: true,
+          },
+        });
 
-    oauth2Client.setCredentials({
-      access_token: userInfo?.accounts[0].access_token,
-      refresh_token: userInfo?.accounts[0].refresh_token,
-    });
+        oauth2Client.setCredentials({
+          access_token: userInfo?.accounts[0].access_token,
+          refresh_token: userInfo?.accounts[0].refresh_token,
+        });
 
-    await (async function (labels: Array<string>) {
-      let query = "-{";
-      for (const label of labels) {
-        let paginate = true;
-        do {
-          let list = await gmail.users.messages.list({
-            userId: "me",
-            auth: oauth2Client,
-            labelIds: [label],
-            q: query + "}",
-          });
+        await (async function (labels: Array<string>) {
+          let query = "-{";
+          for (const label of labels) {
+            let paginate = true;
+            do {
+              let list = await gmail.users.messages.list({
+                userId: "me",
+                auth: oauth2Client,
+                labelIds: [label],
+                q: query + "}",
+              });
 
-          if (list.data.resultSizeEstimate === 0) {
-            paginate = false;
-            break;
+              if (list.data.resultSizeEstimate === 0) {
+                paginate = false;
+                break;
+              }
+
+              let message = await gmail.users.messages.get({
+                userId: "me",
+                auth: oauth2Client,
+                id: list.data.messages![0].id!,
+                fields: "payload/headers",
+              });
+
+              let from = message.data.payload?.headers?.filter(
+                (obj) => obj.name == "From"
+              )[0].value;
+
+              let unsub = message.data.payload?.headers?.filter(
+                (obj) => obj.name == "List-Unsubscribe"
+              )[0];
+
+              let email = from!.substring(
+                from!.indexOf("<") + 1,
+                from!.indexOf(">")
+              );
+
+              let company = from!.substring(0, from!.indexOf("<") - 1);
+
+              if (unsub?.value) {
+                let link = unsub.value.substring(
+                  unsub.value.indexOf("<") + 1,
+                  unsub.value.indexOf(">")
+                );
+
+                links.push(link);
+                valid_emails.push(email);
+                companies.push(company);
+              }
+
+              query += `${email}, `;
+              console.log(query);
+            } while (paginate);
           }
+        })(labels);
 
-          let message = await gmail.users.messages.get({
-            userId: "me",
-            auth: oauth2Client,
-            id: list.data.messages![0].id!,
-            fields: "payload/headers",
-          });
+        const batch = await prisma.subscriptionBatch.create({
+          data: {
+            userEmail: userInfo!.email!,
+            userId: userInfo!.id!,
+          },
+        });
 
-          let from = message.data.payload?.headers?.filter(
-            (obj) => obj.name == "From"
-          )[0].value;
+        const data = links.map((link, idx) => {
+          return {
+            userId: userInfo!.id,
+            company: companies[idx],
+            originEmail: valid_emails[idx],
+            userEmail: userInfo!.email!,
+            unsubscribe: link,
+            batchId: batch.id,
+          };
+        });
 
-          let unsub = message.data.payload?.headers?.filter(
-            (obj) => obj.name == "List-Unsubscribe"
-          )[0];
+        const result = await prisma.subscription.createMany({
+          data: data,
+        });
 
-          let email = from!.substring(
-            from!.indexOf("<") + 1,
-            from!.indexOf(">")
-          );
-
-          let company = from!.substring(0, from!.indexOf("<") - 1);
-
-          if (unsub?.value) {
-            let link = unsub.value.substring(
-              unsub.value.indexOf("<") + 1,
-              unsub.value.indexOf(">")
-            );
-
-            links.push(link);
-            valid_emails.push(email);
-            companies.push(company);
-          }
-
-          query += `${email}, `;
-        } while (paginate);
+        console.log(result);
+      } catch (e) {
+        console.error(e);
       }
-    })(labels);
 
-    const batch = await prisma.subscriptionBatch.create({
-      data: {
-        userEmail: userInfo!.email!,
-        userId: userInfo!.id!,
-      },
-    });
-
-    const data = links.map((link, idx) => {
       return {
-        userId: userInfo!.id,
-        company: companies[idx],
-        originEmail: valid_emails[idx],
-        userEmail: userInfo!.email!,
-        unsubscribe: link,
-        batchId: batch.id,
+        test: "Hello!",
       };
-    });
+    },
+  })
+  .query("getAccounts", {
+    input: z.object({
+      email: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const user = await prisma.user.findFirst({
+        where: {
+          email: input.email,
+        },
+        include: {
+          accounts: true,
+        },
+      });
 
-    const result = await prisma.subscription.createMany({
-      data: data,
-    });
-
-    console.log(result);
-
-    return {
-      test: "Hello!",
-    };
-  },
-});
+      return { data: user!.accounts };
+    },
+  })
+  .mutation("getURL", {
+    input: z.object({
+      emailProvider: z.string(),
+    }),
+    resolve({ input }) {
+      if (input.emailProvider == "google") {
+        const url = getGoogleUrl();
+        return { url: url };
+      }
+    },
+  });
 
 export type AppRouter = typeof appRouter;
 

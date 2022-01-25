@@ -25,6 +25,10 @@ export default async function handler(
     },
     update: {
       email: info.email,
+      refresh_token: tokens.refresh_token,
+      access_token: tokens.access_token,
+      expires_at: Math.floor(tokens.expiry_date! / 1000),
+      id_token: tokens.id_token,
     },
     create: {
       userId: user!.id,

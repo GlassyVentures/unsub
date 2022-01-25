@@ -3,7 +3,8 @@ import * as trpcNext from "@trpc/server/adapters/next";
 import { z } from "zod";
 import { google } from "googleapis";
 import { PrismaClient } from "@prisma/client";
-import { getGoogleUrl } from "libs/auth/google";
+import { getCurrentTokens, getGoogleUrl } from "libs/auth/google";
+import { TRPCError } from "@trpc/server";
 
 const prisma = new PrismaClient();
 
@@ -30,18 +31,33 @@ const appRouter = trpc
         let companies: Array<string> = [];
         let valid_emails: Array<string> = [];
 
-        const userInfo = await prisma.user.findUnique({
+        const userInfo = await prisma.account.findUnique({
           where: {
             email: input.email,
           },
-          include: {
-            accounts: true,
-          },
         });
 
+        let tokens = {
+          refresh_token: userInfo!.refresh_token!,
+          access_token: userInfo!.access_token!,
+        };
+
+        if (userInfo!.expires_at! * 1000 < Date.now()) {
+          try {
+            await getCurrentTokens(input.email, tokens.refresh_token);
+          } catch (e) {
+            console.error(e);
+            throw new TRPCError({
+              code: "FORBIDDEN",
+              message: "Your account token as expired",
+              cause: e,
+            });
+          }
+        }
+
         oauth2Client.setCredentials({
-          access_token: userInfo?.accounts[0].access_token,
-          refresh_token: userInfo?.accounts[0].refresh_token,
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token,
         });
 
         await (async function (labels: Array<string>) {
@@ -125,6 +141,7 @@ const appRouter = trpc
         console.log(result);
       } catch (e) {
         console.error(e);
+        throw e;
       }
 
       return {

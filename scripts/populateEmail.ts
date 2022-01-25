@@ -12,7 +12,6 @@ const updateAccount = async (email: string, id: string) => {
         email: email,
       },
     });
-    console.log(res);
   } catch (e) {
     console.error(e);
   }
@@ -24,7 +23,6 @@ const main = async () => {
       accounts: true,
     },
   });
-  console.log(users);
 
   users.forEach((e) => {
     e.accounts.forEach((a) => updateAccount(e.email!, a.id));

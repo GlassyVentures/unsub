@@ -49,7 +49,7 @@ export const getCurrentTokens = async (
 
   const refreshedTokens = await response.json();
 
-  if (response.ok) {
+  if (!response.ok) {
     await prisma.account.delete({
       where: {
         email: email,
@@ -57,6 +57,7 @@ export const getCurrentTokens = async (
     });
     throw refreshedTokens;
   }
+
   prisma.account.update({
     where: {
       email: email,

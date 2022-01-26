@@ -17,7 +17,7 @@ const EarlyAccess: NextComponentWithAuth = () => {
       <Header>
         <div className="text-center px-8 h-screen flex flex-col justify-center">
           <h1 className="text-2xl font-bold">
-            Hey {session?.user!.name}, you have early access to Unsub!
+            Hey, you have early access to Unsub!
           </h1>
           <h2 className="text-xl mt-12 underline underline-offset-4">
             Here is what we are up to right now{" "}

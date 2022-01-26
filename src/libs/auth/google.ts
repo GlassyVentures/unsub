@@ -68,6 +68,10 @@ export const getCurrentTokens = async (
       expires_at: Date.now() + refreshedTokens.expires_in,
     },
   });
+  return {
+    refresh_token: refreshedTokens.refresh_token,
+    access_token: refreshedTokens.access_token,
+  };
 };
 
 export const getGoogleTokens = async (code: string) => {

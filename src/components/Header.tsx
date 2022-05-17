@@ -32,17 +32,14 @@ const AuthButton: React.FC = () => {
   );
 };
 
-const Header: React.FC = ({ children }) => {
+const Header: React.FC = () => {
   const { data: session } = useSession();
   return (
-    <div>
-      <div className="flex justify-between items-center p-3 shadow-xl bg-gray-100">
-        <Link passHref href={session?.early_access ? "/EarlyAccess" : "/"}>
-          <h1 className="font-bold text-xl">UNSUB</h1>
-        </Link>
-        <AuthButton />
-      </div>
-      {children}
+    <div className="flex justify-between items-center p-3 shadow-xl bg-gray-100">
+      <Link passHref href={session?.early_access ? "/EarlyAccess" : "/"}>
+        <h1 className="font-bold text-xl">UNSUB</h1>
+      </Link>
+      <AuthButton />
     </div>
   );
 };

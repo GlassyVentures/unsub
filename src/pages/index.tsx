@@ -50,7 +50,7 @@ const EarlyAccessButton: React.FC = () => {
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className="h-screen">
       <Head>
         <title>Unsub</title>
         <meta name="description" content="Take back control of your email." />
@@ -58,20 +58,18 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Header>
-          <div className="flex flex-col items-center justify-center h-screen px-4">
-            <h1 className="w-screen text-5xl font-bold text-center">UNSUB</h1>
-            <h2 className="w-screen mt-1 text-xl text-center">
-              Take back control of your email.
-            </h2>
-            <p className="relative w-screen mb-4 text-base text-center">
-              See the emails you want. Automatically unsubscribe from the rest
-              with unsub.
-              <span className="absolute -top-1"> ✨</span>
-            </p>
-            <EarlyAccessButton />
-          </div>
-        </Header>
+        <Header />
+        <div className="flex flex-col items-center justify-center min-h-full pt-60 px-10">
+          <h2 className="mt-2 text-3xl font-bold text-center">
+            Take back control of your email.
+          </h2>
+          <p className="relative mb-4 text-base text-center">
+            See the emails you want. Automatically unsubscribe from the rest
+            with unsub.
+            <span className="-top-1"> ✨</span>
+          </p>
+          <EarlyAccessButton />
+        </div>
       </main>
 
       <footer className="absolute bottom-0 w-screen text-center">

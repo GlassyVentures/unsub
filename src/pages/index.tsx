@@ -1,13 +1,8 @@
 import Link from "next/link";
 import Head from "next/head";
 import Header from "components/Header";
-import { signIn, useSession, getSession } from "next-auth/react";
-import type { GetServerSidePropsContext, NextPage } from "next";
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-  return { props: { session } };
-}
+import { signIn, useSession } from "next-auth/react";
+import type { NextPage } from "next";
 
 const EarlyAccessButton = () => {
   const { data: session, status } = useSession();

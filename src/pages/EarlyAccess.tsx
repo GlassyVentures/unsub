@@ -22,8 +22,9 @@ const EarlyAccess: NextPage = () => {
   const { data: session } = useSession();
 
   return (
-    <Header>
-      <div className="text-center px-8 h-screen flex flex-col justify-center">
+    <div className="h-screen">
+      <Header />
+      <div className="text-center flex flex-col justify-center mt-60">
         <h1 className="text-2xl font-bold">
           Hey {session?.user!.name}, you have early access to Unsub!
         </h1>
@@ -43,7 +44,7 @@ const EarlyAccess: NextPage = () => {
         </h2>
         <Twitter />
       </div>
-    </Header>
+    </div>
   );
 };
 

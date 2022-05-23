@@ -10,7 +10,7 @@ const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) => {
-  LogRocket.init("5ptpgm/unsub");
+  LogRocket.init(process.env.NEXT_PUBLIC_LOGROCKET!);
 
   return (
     <PlausibleProvider domain="unsub.email">

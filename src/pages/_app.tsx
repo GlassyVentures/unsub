@@ -5,6 +5,7 @@ import Head from "next/head";
 import { DefaultSeo } from "components/SEO";
 import { SessionProvider } from "next-auth/react";
 import LogRocket from "logrocket";
+import LogRocketWrapper from "components/LogRocket";
 
 const MyApp = ({
   Component,
@@ -19,7 +20,9 @@ const MyApp = ({
       </Head>
       <DefaultSeo />
       <SessionProvider session={session}>
-        <Component {...pageProps} />
+        <LogRocketWrapper>
+          <Component {...pageProps} />
+        </LogRocketWrapper>
       </SessionProvider>
     </PlausibleProvider>
   );

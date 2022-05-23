@@ -1,18 +1,7 @@
-import { useSession, getSession } from "next-auth/react";
-import type { GetServerSidePropsContext, NextPage } from "next";
+import { useSession } from "next-auth/react";
+import type { NextPage } from "next";
 import Header from "components/Header";
 import Twitter from "components/Twitter";
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-
-  if (!session?.early_access || !session.user) {
-    return { redirect: { destination: "/AccessDenied" } };
-  }
-
-  return { props: { session } };
-}
-
 const todo = [
   "Finalizing the server that unsubscribes you from emails",
   "Talking to you and getting your feedback!",

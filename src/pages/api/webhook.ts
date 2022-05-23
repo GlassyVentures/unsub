@@ -36,14 +36,15 @@ export default async function handler(
 
       const email = obj.charges.data[0]?.billing_details.email;
 
-      await prisma.user.update({
-        where: {
-          email: email,
-        },
-        data: {
-          earlyAccess: true,
-        },
-      });
+      email &&
+        (await prisma.user.update({
+          where: {
+            email: email,
+          },
+          data: {
+            earlyAccess: true,
+          },
+        }));
       break;
     default:
       console.log("Unhandled Webhook");

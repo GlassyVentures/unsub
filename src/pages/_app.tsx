@@ -4,11 +4,14 @@ import PlausibleProvider from "next-plausible";
 import Head from "next/head";
 import { DefaultSeo } from "components/SEO";
 import { SessionProvider } from "next-auth/react";
+import LogRocket from "logrocket";
 
 const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) => {
+  LogRocket.init("5ptpgm/unsub");
+
   return (
     <PlausibleProvider domain="unsub.email">
       <Head>

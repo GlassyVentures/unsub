@@ -10,7 +10,7 @@ const Subscriptions: NextPage = () => {
   const getEmails = trpc.useQuery([
     "get-emails",
     {
-      email: session?.user?.email!,
+      email: session?.user ? session.user.email! : null, // TODO: fix this
     },
   ]);
 

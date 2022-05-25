@@ -137,9 +137,10 @@ export const appRouter = trpc
   })
   .query("get-emails", {
     input: z.object({
-      email: z.string(),
+      email: z.string().nullable(),
     }),
     async resolve({ input }) {
+      if (!input.email) return;
       const user = await prisma.user.findUnique({
         where: {
           email: input.email,

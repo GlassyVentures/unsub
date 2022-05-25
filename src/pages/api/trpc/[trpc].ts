@@ -134,6 +134,23 @@ export const appRouter = trpc
         console.error(e);
       }
     },
+  })
+  .query("get-emails", {
+    input: z.object({
+      email: z.string(),
+    }),
+    async resolve({ input }) {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: input.email,
+        },
+      });
+      return await prisma.emailSubscription.findMany({
+        where: {
+          user: user!,
+        },
+      });
+    },
   });
 
 // export type definition of API

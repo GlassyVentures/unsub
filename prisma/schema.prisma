@@ -1,23 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
 model Onboard {
-  email String @id
+  email     String  @id @unique
   onboarded Boolean @default(false)
-
-  @@unique([email])
 }
 
 model Account {
@@ -31,12 +26,12 @@ model Account {
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String? @db.VarChar(2000) // To prevent length error.
+  id_token           String? @db.VarChar(2000)
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email              String? @unique
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -50,14 +45,24 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  earlyAccess   Boolean @default(false)
-  accounts      Account[]
-  sessions      Session[]
+  id                String              @id @default(cuid())
+  name              String?
+  email             String?             @unique
+  emailVerified     DateTime?
+  image             String?
+  earlyAccess       Boolean             @default(false)
+  accounts          Account[]
+  sessions          Session[]
+  EmailSubscription EmailSubscription[]
+}
+
+model EmailSubscription {
+  id           String  @id @default(cuid())
+  companyEmail String  @unique
+  companyName  String
+  subscribed   Boolean @default(true)
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -67,4 +72,3 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-

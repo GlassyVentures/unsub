@@ -2,6 +2,8 @@ import { useSession } from "next-auth/react";
 import type { NextPage } from "next";
 import Header from "components/Header";
 import Twitter from "components/Twitter";
+import { trpc } from "utils/trpc";
+
 const todo = [
   "Finalizing the server that unsubscribes you from emails",
   "Talking to you and getting your feedback!",
@@ -9,6 +11,7 @@ const todo = [
 
 const EarlyAccess: NextPage = () => {
   const { data: session } = useSession();
+  const scanEmail = trpc.useMutation(["scan-email"]);
 
   return (
     <div className="h-screen">
@@ -31,6 +34,13 @@ const EarlyAccess: NextPage = () => {
           {" "}
           If you have any feedback or questions, dm me on twitter!
         </h2>
+        <button
+          onClick={() => {
+            scanEmail.mutate({ email: session?.user?.email! });
+          }}
+        >
+          On Click
+        </button>
         <Twitter />
       </div>
     </div>

@@ -15,6 +15,8 @@
         "@trpc/next": "^9.23.6",
         "@trpc/react": "^9.23.6",
         "@trpc/server": "^9.23.6",
+        "@types/gapi": "^0.0.42",
+        "googleapis": "^100.0.0",
         "logrocket": "^3.0.0",
         "next": "12.0.7",
         "next-auth": "^4.0.5",

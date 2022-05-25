@@ -2,6 +2,7 @@ import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/libs/prisma";
+import { rotateGoogleTokens } from "./google";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -28,6 +29,9 @@ export default NextAuth({
       return baseUrl;
     },
     async session({ user, session }) {
+      // Ensures fresh tokens are always ready to be used during email scan.
+      await rotateGoogleTokens(user.id).catch((e) => console.error(e));
+
       const onboard = await prisma.onboard.findUnique({
         where: {
           email: user.email!,

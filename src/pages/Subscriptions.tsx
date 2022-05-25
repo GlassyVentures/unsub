@@ -10,7 +10,7 @@ const todo = [
   "Talking to you and getting your feedback!",
 ];
 
-const EarlyAccess: NextPage = () => {
+const Subscriptions: NextPage = () => {
   const { data: session } = useSession();
   const scanEmail = trpc.useMutation(["scan-email"]);
 
@@ -50,4 +50,4 @@ const EarlyAccess: NextPage = () => {
   );
 };
 
-export default EarlyAccess;
+export default Subscriptions;

@@ -1,4 +1,3 @@
-import { google } from "googleapis";
 import { prisma } from "@/libs/prisma";
 
 const getCurrentTokens = async (accountId: string, refresh_token: string) => {

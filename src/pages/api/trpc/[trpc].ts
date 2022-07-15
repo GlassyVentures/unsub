@@ -2,7 +2,7 @@ import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { google } from "googleapis";
 import { z } from "zod";
-import { prisma } from "@/libs/prisma";
+import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
 
 type Email = {
@@ -24,18 +24,6 @@ const oauth2Client = new google.auth.OAuth2(
 //TODO make protected routes
 export const appRouter = trpc
   .router()
-  .query("hello", {
-    input: z
-      .object({
-        text: z.string().nullish(),
-      })
-      .nullish(),
-    resolve({ input }) {
-      return {
-        greeting: `hello ${input?.text ?? "world"}`,
-      };
-    },
-  })
   .mutation("scan-email", {
     input: z.object({
       email: z.string(),

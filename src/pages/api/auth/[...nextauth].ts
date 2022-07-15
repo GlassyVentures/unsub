@@ -1,7 +1,7 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "@/libs/prisma";
+import { prisma } from "@/lib/prisma";
 import { rotateGoogleTokens } from "./google";
 
 export default NextAuth({
@@ -26,10 +26,10 @@ export default NextAuth({
     redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return new URL(url, baseUrl).toString();
       else if (url.startsWith("https://buy.stripe.com")) return url;
-      return baseUrl;
+      return url;
     },
     async session({ user, session }) {
-      // Ensures fresh tokens are always ready to be used during email scan.
+      // Ensure fresh tokens are always ready to be used during email scan.
       await rotateGoogleTokens(user.id).catch((e) => console.error(e));
 
       const onboard = await prisma.onboard.findUnique({
@@ -65,6 +65,8 @@ export default NextAuth({
 
       if (result?.earlyAccess) session.early_access = true;
       else session.early_access = false;
+
+      session.id = user.id;
 
       return session;
     },

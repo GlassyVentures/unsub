@@ -1,4 +1,4 @@
-import { prisma } from "@/libs/prisma";
+import { prisma } from "@/lib/prisma";
 
 const getCurrentTokens = async (accountId: string, refresh_token: string) => {
   const url =

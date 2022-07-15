@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { prisma } from "@/libs/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const config = {
   api: {

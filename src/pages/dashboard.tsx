@@ -1,18 +1,23 @@
 import { useSession } from "next-auth/react";
-import type { NextPage } from "next";
 import Header from "components/Header";
 import Twitter from "components/Twitter";
 import { trpc } from "utils/trpc";
 import Secured from "components/Secured";
+import type { NextPageWithAuth } from "@/lib/types";
 
 const todo = [
   "Finalizing the server that unsubscribes you from emails",
   "Talking to you and getting your feedback!",
 ];
 
-const EarlyAccess: NextPage = () => {
-  const { data: session } = useSession();
+const Dashboard: NextPageWithAuth = () => {
+  const { data: session, status } = useSession();
   const scanEmail = trpc.useMutation(["scan-email"]);
+
+  if (typeof window !== "undefined" && status === "loading") return null;
+
+  if (!session) {
+  }
 
   return (
     <Secured>
@@ -33,7 +38,6 @@ const EarlyAccess: NextPage = () => {
             ))}
           </ul>
           <h2 className="text-md mt-12 mb-3">
-            {" "}
             If you have any feedback or questions, dm me on twitter!
           </h2>
           <button
@@ -50,4 +54,6 @@ const EarlyAccess: NextPage = () => {
   );
 };
 
-export default EarlyAccess;
+Dashboard.auth = true;
+
+export default Dashboard;

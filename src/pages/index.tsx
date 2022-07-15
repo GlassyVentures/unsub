@@ -18,16 +18,6 @@ const EarlyAccessButton = () => {
           </Link>
         </div>
       );
-    } else {
-      return (
-        <div className="relative rounded ">
-          <Link passHref href={process.env.NEXT_PUBLIC_PAYMENT_LINK!}>
-            <button className="glowbttn py-3 font-bold text-white transition-shadow duration-300 bg-black rounded shadow-2xl focus-within:ring-4 px-7 hover:bg-text-rad hover:shadow-none">
-              Get Early Access
-            </button>
-          </Link>
-        </div>
-      );
     }
   }
 
